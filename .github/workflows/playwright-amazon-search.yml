@@ -1,4 +1,4 @@
-name: Run Playwright Java Tests
+name: Run Parallel Playwright Tests
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
         run: mvn exec:java -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
 
       - name: Run Tests in Parallel
-      - run: mvn clean test -DsuiteXmlFile=testng.xml
+        run: mvn clean test -DsuiteXmlFile=testng.xml
 
       - name: Upload Test Reports (Optional)
         if: always()
