@@ -14,7 +14,7 @@ public class PracticeTestAutomationLoginTest {
     @BeforeClass
     public void setUp() {
         playwright = Playwright.create();
-        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false));
         page = browser.newPage();
     }
 
@@ -33,8 +33,13 @@ public class PracticeTestAutomationLoginTest {
         String pageContent = page.content();
         Assert.assertTrue(pageContent.contains("Congratulations") || pageContent.contains("successfully logged in"), "Expected text not found on page");
 
-        // Verify Log out button is displayed
-        Locator logoutButton = page.locator("//button[text()='Log out']");
+        // Wait for and verify Log out button is displayed
+        // Use XPath selector for any button containing 'Log out' text
+        page.waitForSelector("//button[contains(., 'Log out')]", new Page.WaitForSelectorOptions().setTimeout(15000));
+        Locator logoutButton = page.locator("//button[contains(., 'Log out')]");
+        if (!logoutButton.isVisible()) {
+            System.out.println("DEBUG: Page content after login:\n" + page.content());
+        }
         Assert.assertTrue(logoutButton.isVisible(), "Log out button is not visible");
     }
 
