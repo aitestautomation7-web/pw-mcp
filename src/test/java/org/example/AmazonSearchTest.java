@@ -1,46 +1,41 @@
 package org.example;
 
 import com.microsoft.playwright.*;
+import org.testng.Assert;
 import org.testng.annotations.*;
 
 public class AmazonSearchTest {
 
-    Playwright playwright;
-    Browser browser;
-    Page page;
+    private Playwright playwright;
+    private Browser browser;
+    private Page page;
 
     @BeforeClass
-    public void setup() {
+    public void setUp() {
         playwright = Playwright.create();
-
-        browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(true)
-        );
-
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
         page = browser.newPage();
     }
 
     @Test
-    public void searchTshirts() {
-        // Navigate to Amazon
-        page.navigate("https://www.amazon.in");
-        page.waitForLoadState();
+    public void testLoginAndVerifySuccess() {
+        page.navigate("https://practicetestautomation.com/practice-test-login/");
+        page.locator("#username").fill("student");
+        page.locator("#password").fill("Password123");
+        page.locator("#submit").click();
 
-        page.getByPlaceholder("Search Amazon.in").fill("tshirts");
-        page.keyboard().press("Enter");
+        // Verify URL contains expected path
+        String url = page.url();
+        Assert.assertTrue(url.contains("practicetestautomation.com/logged-in-successfully/"), "URL does not contain expected path");
 
-        page.waitForSelector("div.s-main-slot");
-
-        // Validate title
-        String title = page.title();
-        System.out.println("Page Title: " + title);
-
-        assert title.toLowerCase().contains("tshirts");
+        // Verify page contains expected text
+        String pageContent = page.content();
+        Assert.assertTrue(pageContent.contains("Congratulations") || pageContent.contains("successfully logged in"), "Expected text not found on page");
     }
 
     @AfterClass
     public void tearDown() {
-        browser.close();
-        playwright.close();
+        if (browser != null) browser.close();
+        if (playwright != null) playwright.close();
     }
 }
