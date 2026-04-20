@@ -24,12 +24,11 @@ public class AmazonSearchTest {
     public void searchTshirts() {
         // Navigate to Amazon
         page.navigate("https://www.amazon.in");
+        page.waitForLoadState();
 
-        // Search for tshirts
-        page.fill("input#twotabsearchtextbox", "tshirts");
-        page.press("input#twotabsearchtextbox", "Enter");
+        page.getByPlaceholder("Search Amazon.in").fill("tshirts");
+        page.keyboard().press("Enter");
 
-        // Wait for results
         page.waitForSelector("div.s-main-slot");
 
         // Validate title
