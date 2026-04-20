@@ -20,7 +20,7 @@ public class AmazonSearchTest {
     @Test
     public void searchTShirtsOnAmazon() {
         page.navigate("https://www.amazon.com/");
-        page.locator("input#twotabsearchtextbox").fill("tshirts");
+        page.locator("//input[@placeholder='Search Amazon']").fill("tshirts");
         page.locator("input#nav-search-submit-button").click();
         // Optionally, assert that results are shown
         page.waitForSelector("span.a-color-state.a-text-bold");
