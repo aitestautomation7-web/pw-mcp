@@ -32,8 +32,8 @@ jobs:
       - name: Install Playwright Browsers
         run: mvn exec:java -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
 
-      - name: Run All Tests
-        run: mvn clean test
+      - name: Run Tests in Parallel
+      - run: mvn clean test -DsuiteXmlFile=testng.xml
 
       - name: Upload Test Reports (Optional)
         if: always()
